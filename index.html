@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>weathercard_test</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+
+    <style>
+        .main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-image: url('https://s1.1zoom.me/big0/147/Cosmos_plant_Summer_Sky_567881_1280x854.jpg');
+            background-size: cover;
+        }
+
+        .card {
+            border-radius: 10% 20%;
+            width: 200px;
+            text-align: center;
+            margin: 5px 0;
+            background: radial-gradient(circle, white, rgb(158, 180, 221));
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="main">
+        <!-- <div class="card">
+            <h1>縣市：</h1>
+            <h2>天氣預測：</h2>
+            <p>降雨率：</p>
+            <p>氣溫：</p>
+        </div> -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+        console.log($(".tab_content"));
+    </script>
+
+    <script>
+        // var main = document.querySelector('.main');
+
+        $.ajax({
+            url: 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-B5282D9D-8FDD-40E9-AD48-B1DF3270465D',
+            success: function (testdata) {
+
+                var all_locations = testdata.records.location;
+                // console.log(all_locations);
+
+                all_locations.forEach(location => {
+                    var locationName = location.locationName;
+                    var Wx = location.weatherElement[0].time[0].parameter.parameterName;
+                    var Pop = location.weatherElement[1].time[0].parameter.parameterName;
+                    var MaxT = location.weatherElement[4].time[0].parameter.parameterName;
+                    var MinT = location.weatherElement[2].time[0].parameter.parameterName;
+                    var CI = location.weatherElement[3].time[0].parameter.parameterName;
+
+                    // main.innerHTML += `<div class="card">
+                    //                     <h2>${locationName}</h2>
+                    //                     <h3>${Wx}</h3>
+                    //                     <p>降雨機率：${Pop}</p>
+                    //                     <p>氣溫：${MinT}度 ~ ${MaxT}度</p>
+                    //                 </div>`;
+
+                    $('.main').append(`<div class="card">
+                                        <h2>${locationName}</h2>
+                                        <h3>${Wx}</h3>
+                                        <p>降雨機率：${Pop}%</p>
+                                        <p>氣溫：${MinT}度 ~ ${MaxT}度</p>
+                                        <p>體感：${CI}</p>
+                                    </div>`);
+                    // append把資料附加上去
+
+                });
+
+            }
+        });
+    </script>
+</body>
+
+</html>
